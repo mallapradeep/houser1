@@ -4,7 +4,7 @@ module.exports = {
         const dbInstance = req.app.get("db");
     
         dbInstance.getAll_houses()
-        .then( (houses) => res.status(200).send(houses) )
+        .then( response=> res.status(200).send(response) )
         .catch( err => {
             res.status(500).send({errorMessage: "Oops! Something went wrong."})
             console.log(err)
@@ -13,9 +13,9 @@ module.exports = {
 
       createHouse: (req, res, next) => {
         const dbInstance = req.app.get("db");
-        const { name, address, city, state,  zip } = req.body;
+        const { name, address, city, state,  zip, img, mortgage, rent } = req.body;
     
-        dbInstance.create_house([ name, address, city, state,  zip ])
+        dbInstance.create_house([ name, address, city, state,  zip, img, mortgage, rent ])
         .then( () => res.sendStatus(200) )
         .catch( err => {
             res.status(500).send({errorMessage: "Oops! Something went wrong."})

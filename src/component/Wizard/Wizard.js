@@ -1,80 +1,35 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
+import { Link, Switch, Route } from 'react-router-dom';
+
+import StepOne from '../StepOne/StepOne';
+import StepTwo from '../StepTwo/StepTwo';
+import StepThree from '../StepThree/StepThree';
+import { cancel} from '../../ducks/reducer';
+import { connect } from 'react-redux';
 
 
-export default class Wizard extends Component {
-    constructor(){
-        super();
+ export class Wizard extends Component {
 
-        this.state = {
-            name: '',
-            address: '',
-            city: '',
-            state: '',
-            zip: 0
-        }
+    cancel(){
+        let { cancel } = this.props;
+        cancel();
     }
+    render(){
+        return (
+            <div>
+                  <Link to='/'>
+                  <button onClick={()=> this.cancel()}>Cancel</button>
+                  </Link>
+                  <Switch>
 
-    handleName(val){
-        this.setState({
-            name: val
-        })
+                      <Route component={StepOne} path='/wizard/step1' />
+                      <Route component={StepTwo} path='/wizard/step2' />
+                      <Route component={StepThree} path='/wizard/step3' />
+
+                    </Switch>
+
+            </div>
+        )
     }
-    handleAddress(val){
-        this.setState({
-            address: val
-        })
-    }
-    handleCity(val){
-        this.setState({
-            city: val
-        })
-    }
-    handleState(val){
-        this.setState({
-            state: val
-        })
-    }
-    handleZip(val){
-        this.setState({
-            zip: val
-        })
-    }
-
-
-    addHouse(){
-        let {name, address, city, state, zip } = this.props;
-        
-        axios.post('/api/house/add', {name, address, city, state, zip } );
-        }
-    
-    
-  render() {
-    return (
-      <div>
-        Wizard
-        <p>name</p>
-        <input type="text" value={this.state.name} onChange={e => this.handleName(e.target.value)}/>
-
-         <p>address</p>
-        <input type="text" value={this.state.address} onChange={e => this.handleAddress(e.target.value)}/>
-
-         <p>city</p>
-        <input type="text" value={this.state.city} onChange={e => this.handleCity(e.target.value)}/>
-
-         <p>state</p>
-        <input type="text" value={this.state.state} onChange={e => this.handleState(e.target.value)}/>
-
-         <p>zip</p>
-        <input type="text" value={this.state.zip} onChange={e => this.handleZip(e.target.value)}/>
-
-         
-        <Link to='/'><button>Cancel</button></Link>
-        <Link to='/'><button onClick={() => this.addHouse }>Complete</button></Link>
-
-
-      </div>
-    )
-  }
 }
+export default connect(null, {cancel})(Wizard);

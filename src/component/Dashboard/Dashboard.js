@@ -12,6 +12,7 @@ export default class Dashboard extends Component {
         this.state = {
             houses: []
         }
+        this.deleteHouse = this.deleteHouse.bind(this);
     }
 //requesting the server to get the list of houses
     componentDidMount(){
@@ -27,6 +28,7 @@ export default class Dashboard extends Component {
     
         axios.delete(`/api/house/delete/${id}`)
              .then(response => {
+                 console.log(response.data)
                  this.setState({
                      house: response.data
                  })
@@ -37,7 +39,7 @@ export default class Dashboard extends Component {
   render() {
       let displayHouses = () => {
           return this.state.houses.map( house => {
-              const {id, name, address, city, state, zip } = house;
+              const {id, name, address, city, state, zip, img,  mortgage, rent  } = house;
               return (
                   <div key = {id}>
                   {/* //passing the house info to the house component */}
@@ -47,17 +49,22 @@ export default class Dashboard extends Component {
                     address={address}
                     city={city}
                     state = {state}
-                    zip = {zip} />
+                    zip = {zip}
+                    img = {img}
+                    mortgage = {mortgage}
+                    rent = {rent}
+                    deleteHouse = {this.deleteHouse}
+                     />
                   </div>
 
               )
           })
       }
     return (
-      <div>
-        Dashboard
+      <div className="App">
+        <h2>Dashboard</h2>
+       <Link to='/wizard/step1'> <button>Add New Property</button></Link> 
         <House />
-       <Link to="/wizard"> <button>Add New Property</button></Link> 
        {displayHouses()}
       </div>
     )
